@@ -41,21 +41,25 @@
   color: #888;
 }
 
-.vercel-theme {
+/* Responsive container for main content */
+.vercel-theme, .vercel-theme.light {
   min-height: 100vh;
-  background: linear-gradient(120deg, #18181b 0%, #23272f 100%);
-  color: #fff;
-  font-family: "Inter", system-ui, sans-serif;
   padding-bottom: 3rem;
-}
-.header {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  width: 100vw;
+  box-sizing: border-box;
+}
+.vercel-theme.light {
+  background: linear-gradient(120deg, #fff 0%, #f6f6f8 100%);
+  color: #18181b;
+}
+.header {
+  width: 100vw;
+  box-sizing: border-box;
+  left: 0;
+  right: 0;
   padding: 2.5rem 1rem 1.5rem 1rem;
-  background: #111113;
-  border-bottom: 1px solid #22232a;
-  margin-bottom: 2rem;
 }
 .header h1 {
   font-size: 2.2rem;
@@ -66,6 +70,8 @@
 .issue-nav {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .issue-tab {
   background: none;
@@ -76,6 +82,9 @@
   border-radius: 6px 6px 0 0;
   cursor: pointer;
   transition: color 0.2s, background 0.2s;
+}
+.issue-tab:hover:not(.active) {
+  filter: brightness(1.1);
 }
 .issue-tab.active,
 .issue-tab[aria-current="true"] {
@@ -115,12 +124,23 @@
   background: #f6f6f8;
 }
 .issue-section {
-  max-width: 480px;
+  max-width: 540px;
+  width: 100vw;
   margin: 0 auto;
-  background: #23272f;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px #0002;
-  padding: 2.5rem 2rem 2rem 2rem;
+  box-sizing: border-box;
+  padding-left: max(env(safe-area-inset-left), 0.5rem);
+  padding-right: max(env(safe-area-inset-right), 0.5rem);
+  /* Subtle card shadow and border for main content */
+  box-shadow: 0 2px 16px #0001, 0 1.5px 0 #23272f;
+  border: 1px solid #23272f;
+  border-radius: 16px;
+  background: rgba(35, 39, 47, 0.98);
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.vercel-theme.light .issue-section {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 2px 16px #0001;
 }
 .issue-section h2 {
   font-size: 1.4rem;
@@ -179,6 +199,7 @@
   padding: 1em 1.5em;
   display: inline-block;
   box-shadow: 0 1px 8px #0002;
+  animation: fadeIn 0.4s;
 }
 .results-bar-chart {
   margin: 2rem 0 1rem 0;
@@ -209,7 +230,7 @@
   height: 100%;
   background: linear-gradient(90deg, #00e887 0%, #007cf0 100%);
   border-radius: 4px;
-  transition: width 0.5s cubic-bezier(0.4, 2, 0.6, 1);
+  transition: width 0.6s cubic-bezier(.4,2,.6,1), background 0.2s;
 }
 .bar-percent {
   min-width: 36px;
@@ -231,6 +252,9 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  /* Smoother modal overlay */
+  background: #000b;
+  animation: fadeIn 0.25s;
 }
 .modal {
   background: #23272f;
@@ -324,6 +348,7 @@
   display: flex;
   gap: 0.5em;
   margin-top: 1.2em;
+  flex-wrap: wrap;
 }
 .add-issue-btn,
 .reset-btn,
@@ -345,16 +370,23 @@
   color: #fff;
 }
 .comments-section {
-  margin-top: 2.5rem;
+  margin-top: 2rem;
+  padding: 1rem 0.5rem 1.2rem 0.5rem;
   background: #18181b;
   border-radius: 8px;
-  padding: 1.2rem 1rem 1.5rem 1rem;
   box-shadow: 0 1px 8px #0002;
 }
 .comments-section h3 {
   margin: 0 0 0.7rem 0;
   font-size: 1.1rem;
   color: #00e887;
+  /* Comments: subtle divider */
+  border-bottom: 1px solid #23272f;
+  padding-bottom: 0.3em;
+  margin-bottom: 0.7em;
+}
+.vercel-theme.light .comments-section h3 {
+  border-bottom: 1px solid #eaeaea;
 }
 .comment-form {
   display: flex;
@@ -394,7 +426,7 @@
   background: #23272f;
   border-radius: 6px;
   margin-bottom: 0.7em;
-  padding: 0.7em 0.8em 0.5em 0.8em;
+  padding: 0.5em 0.5em 0.4em 0.5em;
   box-shadow: 0 1px 4px #0001;
   position: relative;
 }
@@ -417,72 +449,62 @@
   font-style: italic;
   padding: 0.5em 0;
 }
-.vercel-theme.light {
-  background: linear-gradient(120deg, #fff 0%, #f6f6f8 100%);
-  color: #18181b;
+.empty-issues {
+  text-align: center;
+  color: #bdbdbd;
+  margin: 2rem 0;
+  font-style: italic;
+  /* Empty state: icon */
+  position: relative;
 }
-.vercel-theme.light .header {
-  background: #fff;
-  border-bottom: 1px solid #eaeaea;
+.empty-issues::before {
+  content: "🗳️ ";
+  font-size: 1.5em;
+  display: block;
+  margin-bottom: 0.2em;
 }
-.vercel-theme.light .issue-section {
-  background: #fff;
-  color: #18181b;
+.spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid #eaeaea;
+  border-top: 3px solid #007cf0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
 }
-.vercel-theme.light .modal {
-  background: #fff;
-  color: #18181b;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
-.vercel-theme.light .modal input,
-.vercel-theme.light .modal textarea {
-  background: #f6f6f8;
-  color: #18181b;
-  border: 1px solid #eaeaea;
+@media (max-width: 900px) {
+  .issue-section {
+    max-width: 98vw;
+    padding: 1.2rem 0.5rem;
+  }
+  .header {
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+  }
+  .main-navbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5em;
+    padding: 0.5rem 1vw 0.5rem 1vw;
+  }
+  .navbar-center {
+    justify-content: center;
+    gap: 0.7em;
+    margin: 0.2em 0;
+  }
 }
-.vercel-theme.light .add-opt-btn,
-.vercel-theme.light .remove-opt-btn {
-  background: #fff;
-}
-.vercel-theme.light .submit-btn {
-  background: #007cf0;
-  color: #fff;
-}
-.vercel-theme.light .cancel-btn {
-  background: #fff;
-  color: #888;
-  border: 1px solid #eaeaea;
-}
-.vercel-theme.light .header-actions button {
-  background: #fff;
-  color: #007cf0;
-}
-.vercel-theme.light .header-actions button:hover {
-  background: #f6f6f8;
-  color: #18181b;
-}
-.vercel-theme.light .comments-section {
-  background: #fff;
-}
-.vercel-theme.light .comment-form input,
-.vercel-theme.light .comment-form textarea {
-  background: #f6f6f8;
-  color: #18181b;
-  border: 1px solid #eaeaea;
-}
-.vercel-theme.light .comment-item {
-  background: #f6f6f8;
-}
-.vercel-theme.light .comment-user-label {
-  color: #007cf0;
-}
-.vercel-theme.light .comment-date {
-  color: #888;
-}
-.vercel-theme.light .comment-text {
-  color: #18181b;
-}
-.vercel-theme.light .no-comments {
-  color: #888;
+@media (max-width: 700px) {
+  .issue-section {
+    max-width: 100vw;
+    padding: 1.2rem 0.2rem;
+  }
+  .header {
+    padding: 1.2rem 0.2rem 1rem 0.2rem;
+  }
 }
 @media (max-width: 600px) {
   .issue-section {
@@ -491,4 +513,214 @@
   .header {
     padding: 1.2rem 0.5rem 1rem 0.5rem;
   }
+  .main-navbar {
+    font-size: 0.98em;
+    padding: 0.3rem 0.5vw 0.3rem 0.5vw;
+    min-height: 44px;
+  }
+  .navbar-title {
+    font-size: 1em;
+  }
+  .navbar-center {
+    gap: 0.5em;
+  }
+  .navbar-btn, .add-issue-navbar {
+    padding: 0.3em 0.7em;
+    font-size: 0.98em;
+  }
+  .navbar-user {
+    padding: 0.15em 0.5em;
+    font-size: 0.95em;
+  }
+}
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.1rem;
+  }
+  .issue-section h2 {
+    font-size: 1rem;
+  }
+  .modal {
+    min-width: 98vw;
+    padding: 1rem 0.2rem;
+  }
+  .comments-section, .results-bar-chart, .thank-you {
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+  }
+}
+@media (max-width: 400px) {
+  .main-navbar {
+    font-size: 0.93em;
+  }
+  .navbar-title {
+    display: none;
+  }
+}
+
+.main-navbar {
+  width: 100vw;
+  background: linear-gradient(90deg, #18181b 60%, #23272f 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 2vw 0.5rem 2vw;
+  box-shadow: 0 2px 12px #0002;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1.5px solid #23272f;
+  min-height: 56px;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.vercel-theme.light .main-navbar {
+  background: linear-gradient(90deg, #fff 60%, #f6f6f8 100%);
+  color: #18181b;
+  border-bottom: 1.5px solid #eaeaea;
+}
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.7em;
+  margin-right: 0.2em;
+  height: 32px;
+  width: 32px;
+}
+.navbar-title {
+  font-size: 1.35em;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #fff 60%, #00e887 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.vercel-theme.light .navbar-title {
+  background: linear-gradient(90deg, #18181b 60%, #007cf0 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.navbar-center {
+  display: flex;
+  gap: 1.2em;
+  align-items: center;
+}
+.navbar-link {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.08em;
+  opacity: 0.85;
+  position: relative;
+  padding: 0.2em 0.5em 0.2em 0.5em;
+  transition: opacity 0.18s, color 0.18s;
+  border-radius: 4px;
+  outline: none;
+}
+.navbar-link.active, .navbar-link:focus-visible {
+  opacity: 1;
+  color: #00e887;
+}
+.navbar-link .navbar-underline {
+  display: block;
+  position: absolute;
+  left: 0.5em;
+  right: 0.5em;
+  bottom: 0.1em;
+  height: 2.5px;
+  background: linear-gradient(90deg, #00e887 0%, #007cf0 100%);
+  border-radius: 2px;
+  opacity: 0;
+  transform: scaleX(0.7);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.navbar-link.active .navbar-underline, .navbar-link:focus-visible .navbar-underline {
+  opacity: 1;
+  transform: scaleX(1);
+}
+.navbar-link:hover {
+  opacity: 1;
+  color: #00e887;
+  background: #23272f44;
+}
+.vercel-theme.light .navbar-link:hover {
+  background: #eaeaea;
+}
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.navbar-btn {
+  background: #23272f;
+  color: #00e887;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4em 1em;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.18s;
+  box-shadow: 0 1px 4px #0001;
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.navbar-btn:hover {
+  background: #18181b;
+  color: #fff;
+}
+.add-issue-navbar {
+  background: #00e887;
+  color: #18181b;
+  font-weight: 700;
+  margin-left: 0.2em;
+  box-shadow: 0 1px 8px #00e88733;
+}
+.add-issue-navbar:hover {
+  background: #007cf0;
+  color: #fff;
+}
+.plus-icon {
+  font-size: 1.2em;
+  font-weight: 900;
+  margin-right: 0.2em;
+}
+.navbar-user {
+  font-size: 1em;
+  color: #bdbdbd;
+  margin-left: 0.5em;
+  font-weight: 500;
+  background: #23272f;
+  border-radius: 4px;
+  padding: 0.2em 0.7em;
+}
+.vercel-theme.light .navbar-btn {
+  background: #fff;
+  color: #007cf0;
+}
+.vercel-theme.light .navbar-btn:hover {
+  background: #f6f6f8;
+  color: #18181b;
+}
+.vercel-theme.light .add-issue-navbar {
+  background: #007cf0;
+  color: #fff;
+}
+.vercel-theme.light .add-issue-navbar:hover {
+  background: #00e887;
+  color: #18181b;
+}
+.vercel-theme.light .navbar-user {
+  color: #888;
+  background: #f6f6f8;
 }
