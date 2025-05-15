@@ -42,7 +42,8 @@
 }
 
 /* Responsive container for main content */
-.vercel-theme, .vercel-theme.light {
+.vercel-theme,
+.vercel-theme.light {
   min-height: 100vh;
   padding-bottom: 3rem;
   display: flex;
@@ -230,7 +231,7 @@
   height: 100%;
   background: linear-gradient(90deg, #00e887 0%, #007cf0 100%);
   border-radius: 4px;
-  transition: width 0.6s cubic-bezier(.4,2,.6,1), background 0.2s;
+  transition: width 0.6s cubic-bezier(0.4, 2, 0.6, 1), background 0.2s;
 }
 .bar-percent {
   min-width: 36px;
@@ -394,7 +395,8 @@
   gap: 0.5em;
   margin-bottom: 1.2em;
 }
-.comment-user, .comment-input {
+.comment-user,
+.comment-input {
   border-radius: 6px;
   border: 1px solid #444;
   background: #23272f;
@@ -474,8 +476,12 @@
   margin: 2rem auto;
 }
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 @media (max-width: 900px) {
   .issue-section {
@@ -524,7 +530,8 @@
   .navbar-center {
     gap: 0.5em;
   }
-  .navbar-btn, .add-issue-navbar {
+  .navbar-btn,
+  .add-issue-navbar {
     padding: 0.3em 0.7em;
     font-size: 0.98em;
   }
@@ -544,7 +551,9 @@
     min-width: 98vw;
     padding: 1rem 0.2rem;
   }
-  .comments-section, .results-bar-chart, .thank-you {
+  .comments-section,
+  .results-bar-chart,
+  .thank-you {
     padding-left: 0.2rem;
     padding-right: 0.2rem;
   }
@@ -626,7 +635,8 @@
   border-radius: 4px;
   outline: none;
 }
-.navbar-link.active, .navbar-link:focus-visible {
+.navbar-link.active,
+.navbar-link:focus-visible {
   opacity: 1;
   color: #00e887;
 }
@@ -643,7 +653,8 @@
   transform: scaleX(0.7);
   transition: opacity 0.18s, transform 0.18s;
 }
-.navbar-link.active .navbar-underline, .navbar-link:focus-visible .navbar-underline {
+.navbar-link.active .navbar-underline,
+.navbar-link:focus-visible .navbar-underline {
   opacity: 1;
   transform: scaleX(1);
 }

@@ -43,7 +43,9 @@ const STORAGE_KEY = "voting-app-state-v1";
 function App() {
   const [issues, setIssues] = useState<Issue[]>(initialIssues);
   const [selectedIssueId, setSelectedIssueId] = useState<number>(issues[0].id);
-  const [voted, setVoted] = useState<{ [issueId: number]: { user: string, optionId: number } }>({});
+  const [voted, setVoted] = useState<{
+    [issueId: number]: { user: string; optionId: number };
+  }>({});
   const [showAddIssue, setShowAddIssue] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
@@ -56,7 +58,9 @@ function App() {
   const [addError, setAddError] = useState("");
 
   // Comments State
-  const [comments, setComments] = useState<{ [issueId: number]: { user: string; text: string; date: string }[] }>({});
+  const [comments, setComments] = useState<{
+    [issueId: number]: { user: string; text: string; date: string }[];
+  }>({});
   const [commentInput, setCommentInput] = useState("");
   const [commentUser, setCommentUser] = useState("");
 
@@ -235,29 +239,36 @@ function App() {
   };
 
   // Show spinner if issues are loading (simulate async for demo)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoading(true)
-    const t = setTimeout(() => setLoading(false), 400) // simulate load
-    return () => clearTimeout(t)
-  }, [])
+    setLoading(true);
+    const t = setTimeout(() => setLoading(false), 400); // simulate load
+    return () => clearTimeout(t);
+  }, []);
 
   // Track active section for nav highlight
-  const [activeSection, setActiveSection] = useState('issues');
+  const [activeSection, setActiveSection] = useState("issues");
   useEffect(() => {
     const onScroll = () => {
       const scrollY = window.scrollY;
-      if (scrollY < 300) setActiveSection('issues');
-      else if (scrollY < 900) setActiveSection('results');
-      else setActiveSection('about');
+      if (scrollY < 300) setActiveSection("issues");
+      else if (scrollY < 900) setActiveSection("results");
+      else setActiveSection("about");
     };
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <main className={`vercel-theme${theme === 'light' ? ' light' : ''}`}>
-      <Navbar theme={theme} toggleTheme={toggleTheme} username={username} setShowAddIssue={setShowAddIssue} activeSection={activeSection} />
+    <main className={`vercel-theme${theme === "light" ? " light" : ""}`}>
+      <Navbar
+        theme={theme}
+        toggleTheme={toggleTheme}
+        username={username}
+        setShowAddIssue={setShowAddIssue}
+        activeSection={activeSection}
+        handleResetVotes={handleResetVotes}
+      />
       <header className="header">
         <h1>Public Voting</h1>
         <nav className="issue-nav" aria-label="Select issue">
@@ -297,9 +308,15 @@ function App() {
       {loading ? (
         <div className="spinner" aria-label="Loading" />
       ) : issues.length === 0 ? (
-        <div className="empty-issues">No issues available. Add a new issue to get started.</div>
+        <div className="empty-issues">
+          No issues available. Add a new issue to get started.
+        </div>
       ) : (
-        <section className="issue-section" tabIndex={-1} aria-label={selectedIssue?.title}>
+        <section
+          className="issue-section"
+          tabIndex={-1}
+          aria-label={selectedIssue?.title}
+        >
           <h2>{selectedIssue.title}</h2>
           <p className="issue-desc">{selectedIssue.description}</p>
           <form aria-label="Voting options" className="voting-form">
@@ -310,7 +327,9 @@ function App() {
                   <button
                     type="button"
                     onClick={() => handleVote(option.id)}
-                    aria-pressed={voted[selectedIssueId]?.optionId === option.id}
+                    aria-pressed={
+                      voted[selectedIssueId]?.optionId === option.id
+                    }
                     aria-label={`Vote for ${option.label}`}
                     className="vote-btn"
                     disabled={hasVoted(selectedIssueId)}
@@ -328,7 +347,8 @@ function App() {
           <ResultsBarChart options={selectedIssue.options} />
           {/* Total Votes */}
           <div className="total-votes" aria-live="polite">
-            <span style={{fontWeight:600}}>Total votes:</span> {selectedIssue.options.reduce((sum, o) => sum + o.votes, 0)}
+            <span style={{ fontWeight: 600 }}>Total votes:</span>{" "}
+            {selectedIssue.options.reduce((sum, o) => sum + o.votes, 0)}
           </div>
           {hasVoted(selectedIssueId) && (
             <div className="thank-you" role="status" aria-live="polite">
@@ -344,7 +364,7 @@ function App() {
                 className="comment-user"
                 placeholder="Your name"
                 value={commentUser}
-                onChange={e => setCommentUser(e.target.value)}
+                onChange={(e) => setCommentUser(e.target.value)}
                 required
                 maxLength={32}
               />
@@ -352,11 +372,13 @@ function App() {
                 className="comment-input"
                 placeholder="Add a comment..."
                 value={commentInput}
-                onChange={e => setCommentInput(e.target.value)}
+                onChange={(e) => setCommentInput(e.target.value)}
                 required
                 maxLength={240}
               />
-              <button type="submit" className="submit-comment-btn">Comment</button>
+              <button type="submit" className="submit-comment-btn">
+                Comment
+              </button>
             </form>
             <ul className="comments-list">
               {(comments[selectedIssueId] || []).length === 0 && (
@@ -365,7 +387,9 @@ function App() {
               {(comments[selectedIssueId] || []).map((c, i) => (
                 <li key={i} className="comment-item">
                   <span className="comment-user-label">{c.user}</span>
-                  <span className="comment-date">{new Date(c.date).toLocaleString()}</span>
+                  <span className="comment-date">
+                    {new Date(c.date).toLocaleString()}
+                  </span>
                   <div className="comment-text">{c.text}</div>
                 </li>
               ))}
@@ -462,20 +486,27 @@ function App() {
       )}
       {/* Username modal */}
       {showUsernamePrompt && (
-        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Enter username">
+        <div
+          className="modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Enter username"
+        >
           <form className="modal" onSubmit={handleUsernameSubmit}>
             <h3>Enter your name</h3>
             <input
               type="text"
               value={username}
-              onChange={e => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
               required
               maxLength={32}
               autoFocus
               placeholder="Your name"
             />
             <div className="modal-actions">
-              <button type="submit" className="submit-btn">Continue</button>
+              <button type="submit" className="submit-btn">
+                Continue
+              </button>
             </div>
           </form>
         </div>
@@ -484,33 +515,55 @@ function App() {
   );
 }
 
-function Navbar({ theme, toggleTheme, username, setShowAddIssue, activeSection }: {
+function Navbar({
+  theme,
+  toggleTheme,
+  username,
+  setShowAddIssue,
+  activeSection,
+  handleResetVotes,
+}: {
   theme: string;
   toggleTheme: () => void;
   username: string;
   setShowAddIssue: (show: boolean) => void;
   activeSection: string;
+  handleResetVotes: () => void;
 }) {
   const navLinks = [
-    { href: '#issues', label: 'Issues', key: 'issues' },
-    { href: '#results', label: 'Results', key: 'results' },
-    { href: '#about', label: 'About', key: 'about' },
+    { href: "#issues", label: "Issues", key: "issues" },
+    { href: "#results", label: "Results", key: "results" },
+    { href: "#about", label: "About", key: "about" },
   ];
   return (
     <nav className="main-navbar" aria-label="Main navigation">
       <div className="navbar-left">
-        <span className="navbar-logo" aria-label="Voting App Home">{/* Vercel-like logo */}
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><polygon points="16,4 30,28 2,28" fill={theme === 'dark' ? '#fff' : '#18181b'} /></svg>
+        <span className="navbar-logo" aria-label="Voting App Home">
+          {/* Vercel-like logo */}
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            aria-hidden="true"
+          >
+            <polygon
+              points="16,4 30,28 2,28"
+              fill={theme === "dark" ? "#fff" : "#18181b"}
+            />
+          </svg>
         </span>
         <span className="navbar-title">Votely</span>
       </div>
       <div className="navbar-center">
-        {navLinks.map(link => (
+        {navLinks.map((link) => (
           <a
             key={link.key}
             href={link.href}
-            className={`navbar-link${activeSection === link.key ? ' active' : ''}`}
-            aria-current={activeSection === link.key ? 'page' : undefined}
+            className={`navbar-link${
+              activeSection === link.key ? " active" : ""
+            }`}
+            aria-current={activeSection === link.key ? "page" : undefined}
           >
             {link.label}
             <span className="navbar-underline" />
@@ -518,16 +571,30 @@ function Navbar({ theme, toggleTheme, username, setShowAddIssue, activeSection }
         ))}
       </div>
       <div className="navbar-right">
-        <button className="navbar-btn" onClick={toggleTheme} aria-label="Toggle theme">
-          {theme === 'dark' ? '🌙' : '☀️'}
+        <button
+          className="navbar-btn"
+          onClick={toggleTheme}
+          aria-label="Toggle theme"
+        >
+          {theme === "dark" ? "🌙" : "☀️"}
         </button>
-        <button className="navbar-btn add-issue-navbar" onClick={() => setShowAddIssue(true)}>
+        <button
+          className="navbar-btn add-issue-navbar"
+          onClick={() => setShowAddIssue(true)}
+        >
           <span className="plus-icon">+</span> Add Issue
         </button>
-        {username && <span className="navbar-user" title="You are signed in as">👤 {username}</span>}
+        <button className="navbar-btn reset-navbar" onClick={handleResetVotes}>
+          Reset Votes
+        </button>
+        {username && (
+          <span className="navbar-user" title="You are signed in as">
+            👤 {username}
+          </span>
+        )}
       </div>
     </nav>
-  )
+  );
 }
 
 function ResultsBarChart({ options }: { options: Option[] }) {
