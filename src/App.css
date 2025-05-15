@@ -45,7 +45,7 @@
   min-height: 100vh;
   background: linear-gradient(120deg, #18181b 0%, #23272f 100%);
   color: #fff;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   padding-bottom: 3rem;
 }
 .header {
@@ -77,11 +77,42 @@
   cursor: pointer;
   transition: color 0.2s, background 0.2s;
 }
-.issue-tab.active, .issue-tab[aria-current="true"] {
+.issue-tab.active,
+.issue-tab[aria-current="true"] {
   color: #fff;
   background: #23272f;
   font-weight: 600;
   border-bottom: 2px solid #fff;
+}
+.issue-tab-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.1em;
+}
+.delete-issue-btn {
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  font-size: 1.1em;
+  margin-left: 0.1em;
+  cursor: pointer;
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.delete-issue-btn:disabled {
+  color: #8884;
+  cursor: not-allowed;
+}
+.delete-issue-btn:hover:not(:disabled) {
+  background: #18181b;
+}
+.vercel-theme.light .delete-issue-btn {
+  background: none;
+  color: #ff4d4f;
+}
+.vercel-theme.light .delete-issue-btn:hover:not(:disabled) {
+  background: #f6f6f8;
 }
 .issue-section {
   max-width: 480px;
@@ -125,7 +156,7 @@
   box-shadow: 0 1px 4px #0001;
 }
 .vote-btn[disabled],
-.vote-btn[aria-pressed='true'] {
+.vote-btn[aria-pressed="true"] {
   background: #23272f;
   color: #bdbdbd;
   cursor: not-allowed;
@@ -178,7 +209,7 @@
   height: 100%;
   background: linear-gradient(90deg, #00e887 0%, #007cf0 100%);
   border-radius: 4px;
-  transition: width 0.5s cubic-bezier(.4,2,.6,1);
+  transition: width 0.5s cubic-bezier(0.4, 2, 0.6, 1);
 }
 .bar-percent {
   min-width: 36px;
@@ -241,7 +272,8 @@
   gap: 0.5em;
   margin-bottom: 0.3em;
 }
-.add-opt-btn, .remove-opt-btn {
+.add-opt-btn,
+.remove-opt-btn {
   background: #23272f;
   color: #00e887;
   border: none;
@@ -293,7 +325,9 @@
   gap: 0.5em;
   margin-top: 1.2em;
 }
-.add-issue-btn, .reset-btn, .theme-toggle {
+.add-issue-btn,
+.reset-btn,
+.theme-toggle {
   background: #23272f;
   color: #00e887;
   border: none;
@@ -304,7 +338,9 @@
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
-.add-issue-btn:hover, .reset-btn:hover, .theme-toggle:hover {
+.add-issue-btn:hover,
+.reset-btn:hover,
+.theme-toggle:hover {
   background: #18181b;
   color: #fff;
 }
@@ -330,7 +366,8 @@
   color: #18181b;
   border: 1px solid #eaeaea;
 }
-.vercel-theme.light .add-opt-btn, .vercel-theme.light .remove-opt-btn {
+.vercel-theme.light .add-opt-btn,
+.vercel-theme.light .remove-opt-btn {
   background: #fff;
 }
 .vercel-theme.light .submit-btn {
