@@ -149,6 +149,49 @@
   display: inline-block;
   box-shadow: 0 1px 8px #0002;
 }
+.results-bar-chart {
+  margin: 2rem 0 1rem 0;
+  padding: 1rem 0.5rem;
+  background: #18181b;
+  border-radius: 8px;
+  box-shadow: 0 1px 8px #0002;
+}
+.bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.7rem;
+}
+.bar-label {
+  flex: 0 0 90px;
+  font-size: 1em;
+  color: #fff;
+}
+.bar-outer {
+  flex: 1;
+  background: #23272f;
+  border-radius: 4px;
+  height: 18px;
+  margin: 0 0.7em;
+  overflow: hidden;
+}
+.bar-inner {
+  height: 100%;
+  background: linear-gradient(90deg, #00e887 0%, #007cf0 100%);
+  border-radius: 4px;
+  transition: width 0.5s cubic-bezier(.4,2,.6,1);
+}
+.bar-percent {
+  min-width: 36px;
+  text-align: right;
+  color: #bdbdbd;
+  font-size: 0.98em;
+}
+.total-votes {
+  margin: 1.2rem 0 0.5rem 0;
+  color: #bdbdbd;
+  font-size: 1.05em;
+  text-align: right;
+}
 @media (max-width: 600px) {
   .issue-section {
     padding: 1.2rem 0.5rem;

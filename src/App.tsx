@@ -105,6 +105,12 @@ function App() {
             ))}
           </fieldset>
         </form>
+        {/* Results Bar Chart */}
+        <ResultsBarChart options={selectedIssue.options} />
+        {/* Total Votes */}
+        <div className="total-votes">
+          Total votes: {selectedIssue.options.reduce((sum, o) => sum + o.votes, 0)}
+        </div>
         {voted[selectedIssueId] !== undefined && (
           <div className="thank-you" role="status" aria-live="polite">
             <p>Thank you for voting!</p>
@@ -112,6 +118,34 @@ function App() {
         )}
       </section>
     </main>
+  )
+}
+
+function ResultsBarChart({ options }: { options: Option[] }) {
+  const total = options.reduce((sum, o) => sum + o.votes, 0)
+  if (total === 0) return null
+  return (
+    <div className="results-bar-chart" aria-label="Results">
+      {options.map((option) => {
+        const percent = total ? Math.round((option.votes / total) * 100) : 0
+        return (
+          <div key={option.id} className="bar-row">
+            <span className="bar-label">{option.label}</span>
+            <div className="bar-outer">
+              <div
+                className="bar-inner"
+                style={{ width: percent + '%' }}
+                aria-valuenow={percent}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                role="progressbar"
+              />
+            </div>
+            <span className="bar-percent">{percent}%</span>
+          </div>
+        )
+      })}
+    </div>
   )
 }
 
