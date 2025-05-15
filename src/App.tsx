@@ -55,6 +55,11 @@ function App() {
   });
   const [addError, setAddError] = useState("");
 
+  // Comments State
+  const [comments, setComments] = useState<{ [issueId: number]: { user: string; text: string; date: string }[] }>({});
+  const [commentInput, setCommentInput] = useState("");
+  const [commentUser, setCommentUser] = useState("");
+
   const selectedIssue = issues.find((issue) => issue.id === selectedIssueId)!;
 
   // Load from localStorage on mount
@@ -78,6 +83,23 @@ function App() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ issues, voted, theme }));
   }, [issues, voted, theme]);
+
+  // Load comments from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("voting-app-comments-v1");
+    if (saved) {
+      try {
+        setComments(JSON.parse(saved));
+      } catch {
+        // ignore parse errors
+      }
+    }
+  }, []);
+
+  // Save comments to localStorage on changes
+  useEffect(() => {
+    localStorage.setItem("voting-app-comments-v1", JSON.stringify(comments));
+  }, [comments]);
 
   const handleVote = (optionId: number) => {
     if (voted[selectedIssueId] !== undefined) return;
@@ -155,6 +177,27 @@ function App() {
       delete copy[id];
       return copy;
     });
+  };
+
+  // Add Comment Handler
+  const handleAddComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!commentUser.trim() || !commentInput.trim()) return;
+    setComments((prev) => {
+      const prevComments = prev[selectedIssueId] || [];
+      return {
+        ...prev,
+        [selectedIssueId]: [
+          ...prevComments,
+          {
+            user: commentUser.trim(),
+            text: commentInput.trim(),
+            date: new Date().toISOString(),
+          },
+        ],
+      };
+    });
+    setCommentInput("");
   };
 
   return (
@@ -332,6 +375,42 @@ function App() {
             <p>Thank you for voting!</p>
           </div>
         )}
+        {/* Comments Section */}
+        <div className="comments-section">
+          <h3>Comments</h3>
+          <form className="comment-form" onSubmit={handleAddComment}>
+            <input
+              type="text"
+              className="comment-user"
+              placeholder="Your name"
+              value={commentUser}
+              onChange={e => setCommentUser(e.target.value)}
+              required
+              maxLength={32}
+            />
+            <textarea
+              className="comment-input"
+              placeholder="Add a comment..."
+              value={commentInput}
+              onChange={e => setCommentInput(e.target.value)}
+              required
+              maxLength={240}
+            />
+            <button type="submit" className="submit-comment-btn">Comment</button>
+          </form>
+          <ul className="comments-list">
+            {(comments[selectedIssueId] || []).length === 0 && (
+              <li className="no-comments">No comments yet.</li>
+            )}
+            {(comments[selectedIssueId] || []).map((c, i) => (
+              <li key={i} className="comment-item">
+                <span className="comment-user-label">{c.user}</span>
+                <span className="comment-date">{new Date(c.date).toLocaleString()}</span>
+                <div className="comment-text">{c.text}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
     </main>
   );

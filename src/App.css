@@ -344,6 +344,79 @@
   background: #18181b;
   color: #fff;
 }
+.comments-section {
+  margin-top: 2.5rem;
+  background: #18181b;
+  border-radius: 8px;
+  padding: 1.2rem 1rem 1.5rem 1rem;
+  box-shadow: 0 1px 8px #0002;
+}
+.comments-section h3 {
+  margin: 0 0 0.7rem 0;
+  font-size: 1.1rem;
+  color: #00e887;
+}
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-bottom: 1.2em;
+}
+.comment-user, .comment-input {
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #23272f;
+  color: #fff;
+  padding: 0.5em;
+  font-size: 1em;
+}
+.comment-input {
+  min-height: 48px;
+  resize: vertical;
+}
+.submit-comment-btn {
+  align-self: flex-end;
+  background: #00e887;
+  color: #18181b;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4em 1.2em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.2em;
+}
+.comments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.comment-item {
+  background: #23272f;
+  border-radius: 6px;
+  margin-bottom: 0.7em;
+  padding: 0.7em 0.8em 0.5em 0.8em;
+  box-shadow: 0 1px 4px #0001;
+  position: relative;
+}
+.comment-user-label {
+  font-weight: 600;
+  color: #007cf0;
+  margin-right: 0.7em;
+}
+.comment-date {
+  font-size: 0.92em;
+  color: #bdbdbd;
+}
+.comment-text {
+  margin-top: 0.3em;
+  color: #fff;
+  word-break: break-word;
+}
+.no-comments {
+  color: #bdbdbd;
+  font-style: italic;
+  padding: 0.5em 0;
+}
 .vercel-theme.light {
   background: linear-gradient(120deg, #fff 0%, #f6f6f8 100%);
   color: #18181b;
@@ -386,6 +459,30 @@
 .vercel-theme.light .header-actions button:hover {
   background: #f6f6f8;
   color: #18181b;
+}
+.vercel-theme.light .comments-section {
+  background: #fff;
+}
+.vercel-theme.light .comment-form input,
+.vercel-theme.light .comment-form textarea {
+  background: #f6f6f8;
+  color: #18181b;
+  border: 1px solid #eaeaea;
+}
+.vercel-theme.light .comment-item {
+  background: #f6f6f8;
+}
+.vercel-theme.light .comment-user-label {
+  color: #007cf0;
+}
+.vercel-theme.light .comment-date {
+  color: #888;
+}
+.vercel-theme.light .comment-text {
+  color: #18181b;
+}
+.vercel-theme.light .no-comments {
+  color: #888;
 }
 @media (max-width: 600px) {
   .issue-section {
