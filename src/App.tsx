@@ -41,6 +41,16 @@ function App() {
   const [issues, setIssues] = useState<Issue[]>(initialIssues)
   const [selectedIssueId, setSelectedIssueId] = useState<number>(issues[0].id)
   const [voted, setVoted] = useState<{ [issueId: number]: number | null }>({})
+  const [showAddIssue, setShowAddIssue] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+  // Add Issue State
+  const [newIssue, setNewIssue] = useState({
+    title: '',
+    description: '',
+    options: ['', ''],
+  })
+  const [addError, setAddError] = useState('')
 
   const selectedIssue = issues.find((issue) => issue.id === selectedIssueId)!
 
@@ -61,17 +71,50 @@ function App() {
     setVoted((prev) => ({ ...prev, [selectedIssueId]: optionId }))
   }
 
+  // Add Issue Handler
+  const handleAddIssue = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newIssue.title.trim() || !newIssue.description.trim() || newIssue.options.some(opt => !opt.trim())) {
+      setAddError('All fields and options are required.')
+      return
+    }
+    const nextId = Math.max(...issues.map(i => i.id)) + 1
+    setIssues([
+      ...issues,
+      {
+        id: nextId,
+        title: newIssue.title,
+        description: newIssue.description,
+        options: newIssue.options.map((label, idx) => ({ id: idx + 1, label, votes: 0 })),
+      },
+    ])
+    setShowAddIssue(false)
+    setNewIssue({ title: '', description: '', options: ['', ''] })
+    setAddError('')
+    setSelectedIssueId(nextId)
+  }
+
+  // Reset Votes Handler (admin only)
+  const handleResetVotes = () => {
+    setIssues(issues.map(issue => ({
+      ...issue,
+      options: issue.options.map(opt => ({ ...opt, votes: 0 })),
+    })))
+    setVoted({})
+  }
+
+  // Theme toggle
+  const toggleTheme = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'))
+
   return (
-    <main className="vercel-theme">
+    <main className={`vercel-theme${theme === 'light' ? ' light' : ''}`}>
       <header className="header">
         <h1>Public Voting</h1>
         <nav className="issue-nav" aria-label="Select issue">
           {issues.map((issue) => (
             <button
               key={issue.id}
-              className={`issue-tab${
-                selectedIssueId === issue.id ? ' active' : ''
-              }`}
+              className={`issue-tab${selectedIssueId === issue.id ? ' active' : ''}`}
               onClick={() => setSelectedIssueId(issue.id)}
               aria-current={selectedIssueId === issue.id}
             >
@@ -79,7 +122,83 @@ function App() {
             </button>
           ))}
         </nav>
+        <div className="header-actions">
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+            {theme === 'dark' ? '🌙' : '☀️'}
+          </button>
+          <button className="add-issue-btn" onClick={() => setShowAddIssue(true)}>
+            + Add Issue
+          </button>
+          <button className="reset-btn" onClick={handleResetVotes}>
+            Reset Votes
+          </button>
+        </div>
       </header>
+      {/* Add Issue Modal */}
+      {showAddIssue && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Add new issue">
+          <form className="modal" onSubmit={handleAddIssue}>
+            <h3>Add New Issue</h3>
+            <label>
+              Title
+              <input
+                type="text"
+                value={newIssue.title}
+                onChange={e => setNewIssue({ ...newIssue, title: e.target.value })}
+                required
+              />
+            </label>
+            <label>
+              Description
+              <textarea
+                value={newIssue.description}
+                onChange={e => setNewIssue({ ...newIssue, description: e.target.value })}
+                required
+              />
+            </label>
+            <label>Options</label>
+            {newIssue.options.map((opt, idx) => (
+              <div key={idx} className="option-input-row">
+                <input
+                  type="text"
+                  value={opt}
+                  onChange={e => {
+                    const opts = [...newIssue.options]
+                    opts[idx] = e.target.value
+                    setNewIssue({ ...newIssue, options: opts })
+                  }}
+                  required
+                  placeholder={`Option ${idx + 1}`}
+                />
+                {newIssue.options.length > 2 && (
+                  <button
+                    type="button"
+                    className="remove-opt-btn"
+                    onClick={() => setNewIssue({ ...newIssue, options: newIssue.options.filter((_, i) => i !== idx) })}
+                    aria-label="Remove option"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              className="add-opt-btn"
+              onClick={() => setNewIssue({ ...newIssue, options: [...newIssue.options, ''] })}
+            >
+              + Add Option
+            </button>
+            {addError && <div className="add-error">{addError}</div>}
+            <div className="modal-actions">
+              <button type="submit" className="submit-btn">Add Issue</button>
+              <button type="button" className="cancel-btn" onClick={() => setShowAddIssue(false)}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
       <section className="issue-section">
         <h2>{selectedIssue.title}</h2>
         <p className="issue-desc">{selectedIssue.description}</p>
@@ -135,6 +254,7 @@ function ResultsBarChart({ options }: { options: Option[] }) {
               <div
                 className="bar-inner"
                 style={{ width: percent + '%' }}
+                aria-label={`${option.label} progress`}
                 aria-valuenow={percent}
                 aria-valuemin={0}
                 aria-valuemax={100}
